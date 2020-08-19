@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<resources>
+    <string name="app_name">RepeatingAlarm</string>
+    <string name="intro_message">
+        <![CDATA[
+        
+            
+                Introductory text that explains what the sample is intended to demonstrate. Edit
+                in template-params.xml.
+            
+        
+        ]]>
+    </string>
+</resources>
