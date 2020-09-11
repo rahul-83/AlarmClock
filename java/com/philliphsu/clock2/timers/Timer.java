@@ -1,21 +1,4 @@
-/*
- * Copyright 2017 Phillip Hsu
- *
- * This file is part of ClockPlus.
- *
- * ClockPlus is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * ClockPlus is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with ClockPlus.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 
 package com.philliphsu.clock2.timers;
 
@@ -28,9 +11,7 @@ import com.philliphsu.clock2.data.ObjectWithId;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by Phillip Hsu on 7/25/2016.
- */
+
 @AutoValue
 public abstract class Timer extends ObjectWithId implements Parcelable {
     private static final long MINUTE = TimeUnit.MINUTES.toMillis(1);
@@ -51,9 +32,7 @@ public abstract class Timer extends ObjectWithId implements Parcelable {
     public abstract int hour();
     public abstract int minute();
     public abstract int second();
-    // 9/6/2016: Just found/fixed a very subtle bug involving mixing up the parameter orders
-    // of group and label when `create()`ing a Timer in TimerCursor.
-    // TODO: We have never used this at all, so consider deleting this!
+
     public abstract String group();
     public abstract String label();
 
