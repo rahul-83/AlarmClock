@@ -62,13 +62,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final View rootView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-        // http://stackoverflow.com/a/24035591/5055032
-        // http://stackoverflow.com/a/3948036/5055032
-        // The views in our layout have begun drawing.
-        // There is no lifecycle callback that tells us when our layout finishes drawing;
-        // in my own test, drawing still isn't finished by onResume().
-        // Post a message in the UI events queue to be executed after drawing is complete,
-        // so that we may get their dimensions.
+
         rootView.post(new Runnable() {
             @Override
             public void run() {
@@ -82,12 +76,7 @@ public class MainActivity extends BaseActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            /**
-             * @param position Either the current page position if the offset is increasing,
-             *                 or the previous page position if it is decreasing.
-             * @param positionOffset If increasing from [0, 1), scrolling right and position = currentPagePosition
-             *                       If decreasing from (1, 0], scrolling left and position = (currentPagePosition - 1)
-             */
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 Log.d(TAG, String.format("pos = %d, posOffset = %f, posOffsetPixels = %d",
@@ -95,24 +84,10 @@ public class MainActivity extends BaseActivity {
                 int pageBeforeLast = mSectionsPagerAdapter.getCount() - 2;
                 if (position <= pageBeforeLast) {
                     if (position < pageBeforeLast) {
-                        // When the scrolling is due to tab selection between multiple tabs apart,
-                        // this callback is called for each intermediate page, but each of those pages
-                        // will briefly register a sparsely decreasing range of positionOffsets, always
-                        // from (1, 0). As such, you would notice the FAB to jump back and forth between
-                        // x-positions as each intermediate page is scrolled through.
-                        // This is a visual optimization that ends the translation motion, immediately
-                        // returning the FAB to its target position.
-                        // TODO: The animation visibly skips to the end. We could interpolate
-                        // intermediate x-positions if we cared to smooth it out.
+
                         mFab.setTranslationX(0);
                     } else {
-                        // Initially, the FAB's translationX property is zero because, at its original
-                        // position, it is not translated. setTranslationX() is relative to the view's
-                        // left position, at its original position; this left position is taken to be
-                        // the zero point of the coordinate system relative to this view. As your
-                        // translationX value is increasingly negative, the view is translated left.
-                        // But as translationX is decreasingly negative and down to zero, the view
-                        // is translated right, back to its original position.
+
                         float translationX = positionOffsetPixels / -2f;
                         // NOTE: You MUST scale your own additional pixel offsets by positionOffset,
                         // or else the FAB will immediately translate by that many pixels, appearing
@@ -130,10 +105,7 @@ public class MainActivity extends BaseActivity {
                     mFab.setImageDrawable(mAddItemDrawable);
                 }
                 Fragment f = mSectionsPagerAdapter.getFragment(mViewPager.getCurrentItem());
-                // NOTE: This callback is fired after a rotation, right after onStart().
-                // Unfortunately, the FragmentManager handling the rotation has yet to
-                // tell our adapter to re-instantiate the Fragments, so our collection
-                // of fragments is empty. You MUST keep this check so we don't cause a NPE.
+
                 if (f instanceof BaseFragment) {
                     ((BaseFragment) f).onPageSelected();
                 }
