@@ -148,20 +148,6 @@ public class MainActivity extends BaseActivity {
         handleActionScrollToStableId(intent, true);
     }
 
-    /**
-     * Handles a PendingIntent, fired from e.g. clicking a notification, that tells us to
-     * set the ViewPager's current item and scroll to a specific RecyclerView item
-     * given by its stable ID.
-     *
-     * @param performScroll Whether to actually scroll to the stable id, if there is one.
-     *                      Pass true if you know {@link
-     *                      RecyclerViewFragment#onLoadFinished(Loader, BaseItemCursor) onLoadFinished()}
-     *                      had previously been called. Otherwise, pass false so that we can
-     *                      {@link RecyclerViewFragment#setScrollToStableId(long) setScrollToStableId(long)}
-     *                      and let {@link
-     *                      RecyclerViewFragment#onLoadFinished(Loader, BaseItemCursor) onLoadFinished()}
-     *                      perform the scroll for us.
-     */
     private void handleActionScrollToStableId(@NonNull final Intent intent,
                                               final boolean performScroll) {
         if (ACTION_SCROLL_TO_STABLE_ID.equals(intent.getAction())) {
@@ -197,38 +183,7 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK)
             return;
-        // If we get here, either this Activity OR one of its hosted Fragments
-        // started a requested Activity for a result. The latter case may seem
-        // strange; the Fragment is the one starting the requested Activity, so why
-        // does the result end up in its host Activity? Shouldn't it end up in
-        // Fragment#onActivityResult()? Actually, the Fragment's host Activity gets the
-        // first shot at handling the result, before delegating it to the Fragment
-        // in Fragment#onActivityResult().
-        //
-        // There are subtle points to keep in mind when it is actually the Fragment
-        // that should handle the result, NOT this Activity. You MUST start
-        // the requested Activity with Fragment#startActivityForResult(), NOT
-        // Activity#startActivityForResult(). The former calls
-        // FragmentActivity#startActivityFromFragment() to implement its behavior.
-        // Among other things (not relevant to the discussion),
-        // FragmentActivity#startActivityFromFragment() sets internal bit flags
-        // that are necessary to achieve the described behavior (that this Activity
-        // should delegate the result to the Fragment). Finally, you MUST call
-        // through to the super implementation of Activity#onActivityResult(),
-        // i.e. FragmentActivity#onActivityResult(). It is this method where
-        // the aforementioned internal bit flags will be read to determine
-        // which of this Activity's hosted Fragments started the requested
-        // Activity.
-        //
-        // If you are not careful with these points and instead mistakenly call
-        // Activity#startActivityForResult(), THEN YOU WILL ONLY BE ABLE TO
-        // HANDLE THE REQUEST HERE; the super implementation of onActivityResult()
-        // will not delegate the result to the Fragment, because the requisite
-        // internal bit flags are not set with Activity#startActivityForResult().
-        //
-        // Further reading:
-        // http://stackoverflow.com/q/6147884/5055032
-        // http://stackoverflow.com/a/24303360/5055032
+
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
